@@ -1,8 +1,7 @@
 package com.lawrr.skypebot;
 
-public class Main {
+public class SkypeBot {
 
     public static void main(String[] args) {
-        System.out.println("Hello world!");
     }
 }
