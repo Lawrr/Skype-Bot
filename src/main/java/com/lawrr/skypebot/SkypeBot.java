@@ -5,13 +5,14 @@ import com.lawrr.skypebot.modules.YoutubeModule;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
 import in.kyle.ezskypeezlife.api.captcha.SkypeCaptcha;
+import in.kyle.ezskypeezlife.api.captcha.SkypeErrorHandler;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
 
-public class SkypeBot {
+public class SkypeBot implements SkypeErrorHandler {
 
     private EzSkype ezSkype;
 
@@ -60,4 +61,13 @@ public class SkypeBot {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
+
+    // Called when the Skype password needs to be changed (Skype forces you)
+    // Returns the new password and null if no new password will be set
+    @Override
+    public String setNewPassword() {
+        System.out.println("Set new password!");
+        return null;
+    }
+
 }
