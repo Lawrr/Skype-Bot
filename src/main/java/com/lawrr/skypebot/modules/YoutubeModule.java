@@ -34,19 +34,19 @@ public class YoutubeModule {
         String message = e.getMessage().getMessage();
         ArrayList<String> videoIds = getVideoIds(message);
 
-        // Max 5 videos in a message
-        if (videoIds.size() <= 5) {
-            // Get videos data
-            Joiner stringJoiner = Joiner.on(',');
-            String videoIdsString = stringJoiner.join(videoIds);
-            ArrayList<Video> videos = getVideos(videoIdsString);
+        // Set max video ids index so that maximum of 5 videos data are queried
+        int maxIndex = videoIds.size() <= 5 ? videoIds.size() : 5;
 
-            // Send message with info
-            for(Video v : videos) {
-                String title = v.getSnippet().getTitle();
-                String duration = formatDuration(v.getContentDetails().getDuration());
-                e.reply(String.format("Video: %s [%s]", title, duration));
-            }
+        // Get videos data
+        Joiner stringJoiner = Joiner.on(',');
+        String videoIdsString = stringJoiner.join(videoIds.subList(0, maxIndex));
+        ArrayList<Video> videos = getVideos(videoIdsString);
+
+        // Send message with info
+        for(Video v : videos) {
+            String title = v.getSnippet().getTitle();
+            String duration = formatDuration(v.getContentDetails().getDuration());
+            e.reply(String.format("Video: %s [%s]", title, duration));
         }
     }
 
