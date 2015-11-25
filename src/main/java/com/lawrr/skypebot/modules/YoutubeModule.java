@@ -52,7 +52,7 @@ public class YoutubeModule {
 
     private ArrayList<String> getVideoIds(String message) {
         // Get matches
-        Pattern linkPattern = Pattern.compile("(https?://)?(www.)?(m.)?(youtube.com|youtu.be)/(.*?v=)?([\\w\\-_]{9,})([&?].*)?");
+        Pattern linkPattern = Pattern.compile("(https?://)?(www.)?(m.)?(youtube.com|youtu.be)/(.*?v=)?([\\w\\-_]+)([&?].*)?");
         Matcher matcher = linkPattern.matcher(message);
 
         // Add to list
