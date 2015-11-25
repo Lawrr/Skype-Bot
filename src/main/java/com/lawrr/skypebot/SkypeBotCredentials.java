@@ -1,9 +1,11 @@
 package com.lawrr.skypebot;
 
-public class LoginCredentials {
+public class SkypeBotCredentials {
 
     private String username;
     private String password;
+
+    private String youtubeApiKey;
 
     public String getUsername() {
         return username;
@@ -11,6 +13,10 @@ public class LoginCredentials {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getYoutubeApiKey() {
+        return youtubeApiKey;
     }
 
 }

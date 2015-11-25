@@ -1,8 +1,8 @@
 package com.lawrr.skypebot;
 
+import com.lawrr.skypebot.modules.YoutubeModule;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
-import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,19 +21,23 @@ public class SkypeBot {
     }
 
     private void init() {
-        LoginCredentials loginCredentials;
+        SkypeBotCredentials credentials;
         try {
-
             // Get login credentials
-            loginCredentials = EzSkype.GSON.fromJson(new FileReader(new File("credentials.json")), LoginCredentials.class);
+            credentials = EzSkype.GSON.fromJson(new FileReader(new File("credentials.json")), SkypeBotCredentials.class);
 
             // Create EzSkype instance
-            ezSkype = new EzSkype(new SkypeCredentials(loginCredentials.getUsername(), loginCredentials.getPassword()));
+            ezSkype = new EzSkype(new SkypeCredentials(credentials.getUsername(), credentials.getPassword()));
             ezSkype.login();
 
-            // Register events
-            ezSkype.getEventManager().registerEvents(this);
+            // Create modules
+            YoutubeModule youtubeModule = new YoutubeModule(credentials.getYoutubeApiKey());
 
+            // Register events
+            ezSkype.getEventManager().registerEvents(youtubeModule);
+
+            // Start
+            System.out.println("Bot started");
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
             System.exit(1);
@@ -41,14 +45,5 @@ public class SkypeBot {
             System.out.println("Error occurred");
             System.exit(1);
         }
-
     }
-
-    public void onMessage(SkypeMessageReceivedEvent e) {
-        String message = e.getMessage().getMessage();
-        if (message.equals("ping")) {
-            e.reply("pong!");
-        }
-    }
-
 }
