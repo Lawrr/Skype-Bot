@@ -18,6 +18,7 @@ public class RichTextModule {
 
     public void handleCommands(SkypeMessageReceivedEvent e) {
         String message = e.getMessage().getMessage();
+        String senderUsername = e.getMessage().getSender().getUsername();
         ArrayList<String> command = CommandParser.parse(message);
 
         // Check if possible command
@@ -25,7 +26,7 @@ public class RichTextModule {
             String replyMessage = "";
             switch (command.get(0)) {
                 case "!blink": {
-                    if (command.size() == 2) {
+                    if (command.size() == 2 && senderUsername.equals(username)) {
                         switch (command.get(1)) {
                             case "on": {
                                 replyMessage = "Blink enabled";
@@ -55,9 +56,10 @@ public class RichTextModule {
 
     public void editBlinkText(SkypeMessageReceivedEvent e) {
         String message = e.getMessage().getMessage();
+        String senderUsername = e.getMessage().getSender().getUsername();
 
         // Check for blink text
-        if (blinkEnabled && e.getMessage().getSender().getUsername().equals(username)) {
+        if (blinkEnabled && senderUsername.equals(username)) {
             e.getMessage().edit(String.format("<blink>%s</blink>", message));
         }
     }
