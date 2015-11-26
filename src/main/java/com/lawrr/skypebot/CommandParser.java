@@ -6,7 +6,11 @@ import java.util.Arrays;
 public class CommandParser {
 
     public static ArrayList<String> parse(String message) {
-        String[] words = message.split(" ");
+        // Strip tags
+        String taglessMessage = message.replaceAll("<.+>", "");
+
+        // Split into words
+        String[] words = taglessMessage.split(" ");
         ArrayList<String> command = new ArrayList<String>();
 
         // Check if actually a command
