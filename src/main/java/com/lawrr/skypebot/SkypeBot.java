@@ -1,6 +1,7 @@
 package com.lawrr.skypebot;
 
 import com.lawrr.skypebot.modules.AsciiModule;
+import com.lawrr.skypebot.modules.RichTextModule;
 import com.lawrr.skypebot.modules.YoutubeModule;
 import in.kyle.ezskypeezlife.EzSkype;
 import in.kyle.ezskypeezlife.api.SkypeCredentials;
@@ -36,11 +37,13 @@ public class SkypeBot implements SkypeErrorHandler {
             // Create modules
             YoutubeModule youtubeModule = new YoutubeModule(credentials.getYoutubeApiKey());
             AsciiModule asciiModule = new AsciiModule();
+            RichTextModule richTextModule = new RichTextModule(ezSkype.getLocalUser().getUsername());
 
             // Register events
             ezSkype.getEventManager().registerEvents(this);
             ezSkype.getEventManager().registerEvents(youtubeModule);
             ezSkype.getEventManager().registerEvents(asciiModule);
+            ezSkype.getEventManager().registerEvents(richTextModule);
 
             // Start
             System.out.println("Bot started");
