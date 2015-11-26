@@ -24,7 +24,7 @@ public class YoutubeModule {
         }).setYouTubeRequestInitializer(new YouTubeRequestInitializer(apiKey)).setApplicationName("Skype Bot").build();
     }
 
-    public void displayYouTubeInfo(SkypeMessageReceivedEvent e) {
+    public void displayYoutubeInfo(SkypeMessageReceivedEvent e) {
         // Search message for youtube links
         String message = e.getMessage().getMessage();
         ArrayList<String> videoIds = getVideoIds(message);
