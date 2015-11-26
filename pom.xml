@@ -10,6 +10,7 @@
 
     <build>
         <plugins>
+            <!-- Specify main class -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -24,6 +25,7 @@
                     </archive>
                 </configuration>
             </plugin>
+            <!-- Specify java version and encoding -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -31,8 +33,10 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+            <!-- Add dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -50,6 +54,7 @@
     </build>
 
     <repositories>
+        <!-- Repository with skype api -->
         <repository>
             <id>EzSkype-mvn-repo</id>
             <url>https://raw.github.com/AkHo1ic/EzSkype/mvn-repo/</url>
@@ -61,16 +66,19 @@
     </repositories>
 
     <dependencies>
+        <!-- Skype api -->
         <dependency>
             <groupId>in.kyle</groupId>
             <artifactId>EzSkypeEzLife</artifactId>
             <version>1.2.8-SNAPSHOT</version>
         </dependency>
+        <!-- Google api -->
         <dependency>
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client</artifactId>
             <version>1.19.1</version>
         </dependency>
+        <!-- Youtube api -->
         <dependency>
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-youtube</artifactId>
