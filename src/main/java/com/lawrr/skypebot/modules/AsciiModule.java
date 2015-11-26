@@ -7,7 +7,11 @@ import java.util.ArrayList;
 
 public class AsciiModule {
 
-    public void onMessage(SkypeMessageReceivedEvent e) {
+    public AsciiModule() {
+
+    }
+
+    public void handleCommands(SkypeMessageReceivedEvent e) {
         String message = e.getMessage().getMessage();
         ArrayList<String> command = CommandParser.parse(message);
 
