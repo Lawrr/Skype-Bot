@@ -19,14 +19,18 @@ public class AsciiModule {
         if (command.size() > 0) {
             String replyMessage = "";
             switch (command.get(0)) {
+
+                // Shrug
                 case "!shrug": {
                     replyMessage += "¯\\_(ツ)_/¯";
                     break;
                 }
 
+                // Other
                 default: {
                     break;
                 }
+
             }
 
             if (!replyMessage.equals("")) {
