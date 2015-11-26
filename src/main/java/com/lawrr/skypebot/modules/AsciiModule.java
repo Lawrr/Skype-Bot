@@ -8,6 +8,11 @@ public class AsciiModule {
         String message = e.getMessage().getMessage();
         String replyMessage = "";
         switch (message) {
+            case "!shrug": {
+                replyMessage = "¯\\_(ツ)_/¯";
+                break;
+            }
+
             default: {
                 break;
             }
