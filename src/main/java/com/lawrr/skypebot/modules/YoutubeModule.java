@@ -1,7 +1,5 @@
 package com.lawrr.skypebot.modules;
 
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.Joiner;
@@ -11,7 +9,6 @@ import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -23,9 +20,7 @@ public class YoutubeModule {
 
     public YoutubeModule(String apiKey) {
         // Initialise youtube api
-        youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), new HttpRequestInitializer() {
-            public void initialize(HttpRequest request) throws IOException {
-            }
+        youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), request -> {
         }).setYouTubeRequestInitializer(new YouTubeRequestInitializer(apiKey)).setApplicationName("Skype Bot").build();
     }
 
@@ -36,7 +31,6 @@ public class YoutubeModule {
 
         // Set max video ids index so that maximum of 5 videos data are queried
         int maxIndex = videoIds.size() <= 5 ? videoIds.size() : 5;
-
         // Get videos data
         String videoIdsString = Joiner.on(',').join(videoIds.subList(0, maxIndex));
         ArrayList<Video> videos = getVideos(videoIdsString);
