@@ -8,6 +8,11 @@
     <artifactId>SkypeBot</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <!-- Specify encoding -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <build>
         <plugins>
             <!-- Specify main class -->
@@ -25,7 +30,7 @@
                     </archive>
                 </configuration>
             </plugin>
-            <!-- Specify java version and encoding -->
+            <!-- Specify java version -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -33,7 +38,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
             <!-- Add dependencies -->
