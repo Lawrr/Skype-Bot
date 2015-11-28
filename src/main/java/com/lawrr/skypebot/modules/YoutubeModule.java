@@ -11,10 +11,18 @@ import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class YoutubeModule {
+public class YoutubeModule implements Module {
+
+    public List<String> commands = new ArrayList<>(
+            Arrays.asList(
+                    "!youtube"
+            )
+    );
 
     private YouTube youtube;
 
@@ -22,6 +30,10 @@ public class YoutubeModule {
         // Initialise youtube api
         youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), request -> {
         }).setYouTubeRequestInitializer(new YouTubeRequestInitializer(apiKey)).setApplicationName("Skype Bot").build();
+    }
+
+    public List<String> getCommands() {
+        return commands;
     }
 
     public void displayYoutubeInfo(SkypeMessageReceivedEvent e) {

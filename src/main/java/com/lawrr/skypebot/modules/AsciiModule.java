@@ -4,11 +4,23 @@ import com.lawrr.skypebot.CommandParser;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class AsciiModule {
+public class AsciiModule implements Module {
+
+    public List<String> commands = new ArrayList<>(
+            Arrays.asList(
+                    "!shrug"
+            )
+    );
 
     public AsciiModule() {
 
+    }
+
+    public List<String> getCommands() {
+        return commands;
     }
 
     public void handleCommands(SkypeMessageReceivedEvent e) {

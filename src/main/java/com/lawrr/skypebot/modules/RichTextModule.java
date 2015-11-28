@@ -4,8 +4,17 @@ import com.lawrr.skypebot.CommandParser;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class RichTextModule {
+public class RichTextModule implements Module {
+
+    public List<String> commands = new ArrayList<>(
+            Arrays.asList(
+                    "!blink",
+                    "!colour"
+            )
+    );
 
     private String username;
     private boolean blinkEnabled;
@@ -17,6 +26,10 @@ public class RichTextModule {
         this.username = username;
         blinkEnabled = false;
         colorEnabled = false;
+    }
+
+    public List<String> getCommands() {
+        return commands;
     }
 
     public void handleCommands(SkypeMessageReceivedEvent e) {
