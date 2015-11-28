@@ -2,16 +2,17 @@ package com.lawrr.skypebot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class CommandParser {
 
-    public static ArrayList<String> parse(String message) {
+    public static List<String> parse(String message) {
         // Strip tags
         String taglessMessage = message.replaceAll("<.+>", "");
 
         // Split into words
         String[] words = taglessMessage.split(" ");
-        ArrayList<String> command = new ArrayList<String>();
+        List<String> command = new ArrayList<String>();
 
         // Check if actually a command
         if (words[0].indexOf("!") == 0) {

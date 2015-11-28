@@ -39,16 +39,16 @@ public class YoutubeModule implements Module {
     public void displayYoutubeInfo(SkypeMessageReceivedEvent e) {
         // Search message for youtube links
         String message = e.getMessage().getMessage();
-        ArrayList<String> videoIds = getVideoIds(message);
+        List<String> videoIds = getVideoIds(message);
 
         // Set max video ids index so that maximum of 5 videos data are queried
         int maxIndex = videoIds.size() <= 5 ? videoIds.size() : 5;
         // Get videos data
         String videoIdsString = Joiner.on(',').join(videoIds.subList(0, maxIndex));
-        ArrayList<Video> videos = getVideos(videoIdsString);
+        List<Video> videos = getVideos(videoIdsString);
 
         // Format videos data
-        ArrayList<String> videoDetails = new ArrayList<String>();
+        List<String> videoDetails = new ArrayList<String>();
         for(Video v : videos) {
             String title = v.getSnippet().getTitle();
             String duration = formatDuration(v.getContentDetails().getDuration());
@@ -62,13 +62,13 @@ public class YoutubeModule implements Module {
         }
     }
 
-    private ArrayList<String> getVideoIds(String message) {
+    private List<String> getVideoIds(String message) {
         // Get matches
         Pattern linkPattern = Pattern.compile("(https?://)?(www.)?(m.)?(youtube.com|youtu.be)/(.*?v=)?([\\w\\-_]+)([&?].*)?");
         Matcher matcher = linkPattern.matcher(message);
 
         // Add to list
-        ArrayList<String> videoIds = new ArrayList<String>();
+        List<String> videoIds = new ArrayList<String>();
         while (matcher.find()) {
             // Add unique
             if (!videoIds.contains(matcher.group(6))) {
@@ -79,8 +79,8 @@ public class YoutubeModule implements Module {
         return videoIds;
     }
 
-    private ArrayList<Video> getVideos(String videoIdsString) {
-        ArrayList<Video> videos = new ArrayList<Video>();
+    private List<Video> getVideos(String videoIdsString) {
+        List<Video> videos = new ArrayList<Video>();
         try {
             YouTube.Videos.List request = youtube.videos().list("snippet, contentDetails").setId(videoIdsString);
             VideoListResponse response = request.execute();

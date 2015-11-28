@@ -25,7 +25,7 @@ public class AsciiModule implements Module {
 
     public void handleCommands(SkypeMessageReceivedEvent e) {
         String message = e.getMessage().getMessage();
-        ArrayList<String> command = CommandParser.parse(message);
+        List<String> command = CommandParser.parse(message);
 
         // Check if possible command
         if (command.size() > 0) {
