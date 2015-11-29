@@ -8,7 +8,7 @@ public class CommandParser {
 
     public static List<String> parse(String message) {
         // Strip tags
-        String taglessMessage = message.replaceAll("<.+>", "");
+        String taglessMessage = message.replaceAll("<.+?>", "");
 
         // Split into words
         String[] words = taglessMessage.split(" ");
