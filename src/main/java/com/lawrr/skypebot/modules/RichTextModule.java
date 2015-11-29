@@ -2,12 +2,15 @@ package com.lawrr.skypebot.modules;
 
 import com.lawrr.skypebot.CommandParser;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class RichTextModule implements Module {
+
+    public static String RAINBOW_COLOR = "rainbow_color";
 
     public List<String> commands = new ArrayList<>(
             Arrays.asList(
@@ -83,16 +86,23 @@ public class RichTextModule implements Module {
                             }
                             default: {
                                 // Check if possible color
-                                if (newColor.length() == 6) {
+                                boolean isColor = false;
+                                if (newColor.equals("rainbow")) {
+                                    isColor = true;
+                                    color = RAINBOW_COLOR;
+                                } else if (newColor.length() == 6) {
                                     // Check if valid colour
                                     int r = Integer.parseInt(newColor.substring(0, 2), 16);
                                     int g = Integer.parseInt(newColor.substring(2, 4), 16);
                                     int b = Integer.parseInt(newColor.substring(4, 6), 16);
                                     if (r <= 255 && r >= 0 && g <= 255 && g >= 0 && b <= 255 && b >= 0) {
+                                        isColor = true;
                                         color = newColor;
-                                        replyMessage = "Colour enabled";
-                                        colorEnabled = true;
                                     }
+                                }
+                                if (isColor) {
+                                    replyMessage = "Colour enabled";
+                                    colorEnabled = true;
                                 }
                                 break;
                             }
@@ -119,14 +129,63 @@ public class RichTextModule implements Module {
         String senderUsername = e.getMessage().getSender().getUsername();
         String editedMessage = message;
 
+        // Check for color text
+        if (colorEnabled && senderUsername.equals(username)) {
+            if (color.equals(RAINBOW_COLOR)) {
+                // Rainbow color
+                editedMessage = "";
+                int currHexColor[] = {255, 0, 0};
+                int colNum;
+                int currCharIndex = 0;
+                int incrementValue = (int) Math.ceil((255 * 6) / message.length());
+                rainbowLoop:
+                for (int cycle = 0; cycle < 1; cycle++) {
+                    for (int color = 1; color <= 6; color++) {
+                        for (int value = 0; value < 256; value += incrementValue) {
+                            // Exit if end of message
+                            if (currCharIndex == message.length()) {
+                                break rainbowLoop;
+                            }
+
+                            // Increment color
+                            if ((double) color / 2 == Math.floor(color / 2)) {
+                                colNum = (int) Math.floor(color / 2);
+                                currHexColor[colNum-1] -= incrementValue;
+                            } else {
+                                colNum = (int) Math.ceil(color / 2) + 1;
+                                if (colNum >= 3) {
+                                    colNum -= 3;
+                                }
+                                currHexColor[colNum] += incrementValue;
+                            }
+
+                            // Set max values for hex
+                            for (int i = 0; i < currHexColor.length; i++) {
+                                if (currHexColor[i] > 255) {
+                                    currHexColor[i] = 255;
+                                } else if (currHexColor[i] < 0) {
+                                    currHexColor[i] = 0;
+                                }
+                            }
+
+                            // Apply tag
+                            String rString = StringUtils.leftPad(Integer.toString(currHexColor[0], 16), 2, '0');
+                            String gString = StringUtils.leftPad(Integer.toString(currHexColor[1], 16), 2, '0');
+                            String bString = StringUtils.leftPad(Integer.toString(currHexColor[2], 16), 2, '0');
+                            editedMessage += String.format("<font color=\"#%s%s%s\">%s</font>", rString, gString, bString, message.charAt(currCharIndex));
+                            currCharIndex++;
+                        }
+                    }
+                }
+            } else {
+                // Normal color
+                editedMessage = String.format("<font color=\"#%s\">%s</font>", color, editedMessage);
+            }
+        }
+
         // Check for blink text
         if (blinkEnabled && senderUsername.equals(username)) {
             editedMessage = String.format("<blink>%s</blink>", editedMessage);
-        }
-
-        // Check for color text
-        if (colorEnabled && senderUsername.equals(username)) {
-            editedMessage = String.format("<font color=\"#%s\">%s</font>", color, editedMessage);
         }
 
         // Edit original message if different
