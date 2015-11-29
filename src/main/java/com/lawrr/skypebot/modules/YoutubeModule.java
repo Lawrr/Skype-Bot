@@ -20,7 +20,6 @@ public class YoutubeModule implements Module {
 
     public List<String> commands = new ArrayList<>(
             Arrays.asList(
-                    "!youtube"
             )
     );
 
