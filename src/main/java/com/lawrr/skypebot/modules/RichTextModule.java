@@ -92,10 +92,7 @@ public class RichTextModule implements Module {
                                     color = RAINBOW_COLOR;
                                 } else if (newColor.length() == 6) {
                                     // Check if valid colour
-                                    int r = Integer.parseInt(newColor.substring(0, 2), 16);
-                                    int g = Integer.parseInt(newColor.substring(2, 4), 16);
-                                    int b = Integer.parseInt(newColor.substring(4, 6), 16);
-                                    if (r <= 255 && r >= 0 && g <= 255 && g >= 0 && b <= 255 && b >= 0) {
+                                    if (Integer.parseInt(newColor, 16) >= 0 && Integer.parseInt(newColor, 16) <= Integer.parseInt("ffffff", 16)) {
                                         isColor = true;
                                         color = newColor;
                                     }
