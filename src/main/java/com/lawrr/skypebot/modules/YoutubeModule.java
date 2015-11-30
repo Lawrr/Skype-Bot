@@ -18,11 +18,10 @@ import java.util.regex.Pattern;
 
 public class YoutubeModule implements Module {
 
-    public List<String> commands = new ArrayList<>(
+    private List<String> commands = new ArrayList<>(
             Arrays.asList(
             )
     );
-
     private YouTube youtube;
 
     public YoutubeModule(String apiKey) {

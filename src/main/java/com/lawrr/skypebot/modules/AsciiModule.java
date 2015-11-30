@@ -9,7 +9,7 @@ import java.util.List;
 
 public class AsciiModule implements Module {
 
-    public List<String> commands = new ArrayList<>(
+    private List<String> commands = new ArrayList<>(
             Arrays.asList(
                     "!shrug"
             )
@@ -31,7 +31,6 @@ public class AsciiModule implements Module {
         if (command.size() > 0) {
             String replyMessage = "";
             switch (command.get(0)) {
-
                 // Shrug
                 case "!shrug": {
                     replyMessage += "¯\\_(ツ)_/¯";

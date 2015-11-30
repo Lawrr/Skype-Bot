@@ -12,13 +12,12 @@ public class RichTextModule implements Module {
 
     public static String RAINBOW_COLOR = "rainbow_color";
 
-    public List<String> commands = new ArrayList<>(
+    private List<String> commands = new ArrayList<>(
             Arrays.asList(
                     "!blink",
                     "!colour"
             )
     );
-
     private String username;
     private boolean blinkEnabled;
     private boolean colorEnabled;
@@ -44,7 +43,6 @@ public class RichTextModule implements Module {
         if (command.size() > 0) {
             String replyMessage = "";
             switch (command.get(0)) {
-
                 // Blink
                 case "!blink": {
                     if (command.size() == 2 && senderUsername.equals(username)) {

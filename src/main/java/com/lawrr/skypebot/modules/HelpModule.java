@@ -10,7 +10,7 @@ import java.util.List;
 
 public class HelpModule implements Module {
 
-    public List<String> commands = new ArrayList<>(
+    private List<String> commands = new ArrayList<>(
             Arrays.asList(
                     "!help"
             )
