@@ -7,11 +7,8 @@ import java.util.List;
 public class MessageParser {
 
     public static List<String> toCommand(String message) {
-        // Strip tags
-        String taglessMessage = message.replaceAll("<.+?>", "");
-
         // Split into words
-        String[] words = taglessMessage.split(" ");
+        String[] words = message.split(" ");
         List<String> command = new ArrayList<String>();
 
         // Check if actually a command
