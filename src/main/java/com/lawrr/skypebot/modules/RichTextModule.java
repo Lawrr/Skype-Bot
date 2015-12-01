@@ -3,6 +3,7 @@ package com.lawrr.skypebot.modules;
 import com.lawrr.skypebot.MessageParser;
 import in.kyle.ezskypeezlife.Chat;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -149,7 +150,7 @@ public class RichTextModule implements Module {
             }
 
             if (!replyMessage.equals("")) {
-                e.reply(MessageParser.encode(replyMessage));
+                e.reply(StringEscapeUtils.escapeHtml4(replyMessage));
             }
         }
     }
@@ -160,7 +161,7 @@ public class RichTextModule implements Module {
         String editedMessage = message;
 
         // Check if html command to handle tags already in the message
-        if (message.substring(0, 6).equals("!html ") && senderUsername.equals(username)) {
+        if (message.length() > 6 && message.substring(0, 6).equals("!html ") && senderUsername.equals(username)) {
             editedMessage = message.substring(6);
         } else {
             // Not html command, handle tags normally
@@ -189,7 +190,7 @@ public class RichTextModule implements Module {
 
         // Edit original message if different
         if (!message.equals(editedMessage)) {
-            e.getMessage().edit(MessageParser.encode(editedMessage));
+            e.getMessage().edit(editedMessage);
         }
     }
 

@@ -23,10 +23,4 @@ public class MessageParser {
         return command;
     }
 
-    public static String encode(String message) {
-        // Encodes & character
-        String encodedMessage = message.replaceAll("&", "&amp;");
-        return encodedMessage;
-    }
-
 }

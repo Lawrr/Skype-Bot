@@ -3,6 +3,7 @@ package com.lawrr.skypebot.modules;
 import com.google.api.client.util.Joiner;
 import com.lawrr.skypebot.MessageParser;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +62,7 @@ public class HelpModule implements Module {
             }
 
             if (!replyMessage.equals("")) {
-                e.reply(MessageParser.encode(replyMessage));
+                e.reply(StringEscapeUtils.escapeHtml4(replyMessage));
             }
         }
     }
