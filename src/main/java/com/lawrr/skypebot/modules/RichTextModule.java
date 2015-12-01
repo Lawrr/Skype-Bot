@@ -163,51 +163,7 @@ public class RichTextModule implements Module {
         if (colorEnabled && senderUsername.equals(username)) {
             if (color.equals(RAINBOW_COLOR)) {
                 // Rainbow color
-                editedMessage = "";
-                int currHexColor[] = {255, 0, 0};
-                int colNum;
-                int currCharIndex = 0;
-                int incrementValue = (int) Math.ceil((255 * 6) / message.length());
-                rainbowLoop:
-                for (int cycle = 0; cycle < 1; cycle++) {
-                    for (int color = 1; color <= 6; color++) {
-                        for (int value = 0; value < 256; value += incrementValue) {
-                            // Exit if end of message
-                            if (currCharIndex == message.length()) {
-                                break rainbowLoop;
-                            }
-
-                            // Increment color
-                            if ((double) color / 2 == Math.floor(color / 2)) {
-                                colNum = (int) Math.floor(color / 2);
-                                currHexColor[colNum-1] -= incrementValue;
-                            } else {
-                                colNum = (int) Math.ceil(color / 2) + 1;
-                                if (colNum >= 3) {
-                                    colNum -= 3;
-                                }
-                                currHexColor[colNum] += incrementValue;
-                            }
-
-                            // Set max values for hex
-                            for (int i = 0; i < currHexColor.length; i++) {
-                                if (currHexColor[i] > 255) {
-                                    currHexColor[i] = 255;
-                                } else if (currHexColor[i] < 0) {
-                                    currHexColor[i] = 0;
-                                }
-                            }
-
-                            // Apply tag
-                            String rString = StringUtils.leftPad(Integer.toString(currHexColor[0], 16), 2, '0');
-                            String gString = StringUtils.leftPad(Integer.toString(currHexColor[1], 16), 2, '0');
-                            String bString = StringUtils.leftPad(Integer.toString(currHexColor[2], 16), 2, '0');
-                            String hexColor = "#" + rString + gString + bString;
-                            editedMessage += Chat.color(Character.toString(message.charAt(currCharIndex)), hexColor);
-                            currCharIndex++;
-                        }
-                    }
-                }
+                editedMessage = rainbowTag(message);
             } else {
                 // Normal color
                 editedMessage = Chat.color(editedMessage, "#" + color);
@@ -228,6 +184,55 @@ public class RichTextModule implements Module {
         if (!message.equals(editedMessage)) {
             e.getMessage().edit(MessageParser.encode(editedMessage));
         }
+    }
+
+    private String rainbowTag(String message) {
+        String rainbowMessage = "";
+        int currHexColor[] = {255, 0, 0};
+        int colNum;
+        int currCharIndex = 0;
+        int incrementValue = (int) Math.ceil((255 * 6) / message.length());
+        rainbowLoop:
+        for (int cycle = 0; cycle < 1; cycle++) {
+            for (int color = 1; color <= 6; color++) {
+                for (int value = 0; value < 256; value += incrementValue) {
+                    // Exit if end of message
+                    if (currCharIndex == message.length()) {
+                        break rainbowLoop;
+                    }
+
+                    // Increment color
+                    if ((double) color / 2 == Math.floor(color / 2)) {
+                        colNum = (int) Math.floor(color / 2);
+                        currHexColor[colNum - 1] -= incrementValue;
+                    } else {
+                        colNum = (int) Math.ceil(color / 2) + 1;
+                        if (colNum >= 3) {
+                            colNum -= 3;
+                        }
+                        currHexColor[colNum] += incrementValue;
+                    }
+
+                    // Set max values for hex
+                    for (int i = 0; i < currHexColor.length; i++) {
+                        if (currHexColor[i] > 255) {
+                            currHexColor[i] = 255;
+                        } else if (currHexColor[i] < 0) {
+                            currHexColor[i] = 0;
+                        }
+                    }
+
+                    // Apply tag
+                    String rString = StringUtils.leftPad(Integer.toString(currHexColor[0], 16), 2, '0');
+                    String gString = StringUtils.leftPad(Integer.toString(currHexColor[1], 16), 2, '0');
+                    String bString = StringUtils.leftPad(Integer.toString(currHexColor[2], 16), 2, '0');
+                    String hexColor = "#" + rString + gString + bString;
+                    rainbowMessage += Chat.color(Character.toString(message.charAt(currCharIndex)), hexColor);
+                    currCharIndex++;
+                }
+            }
+        }
+        return rainbowMessage;
     }
 
 }
