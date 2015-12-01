@@ -16,19 +16,23 @@ public class RichTextModule implements Module {
     private List<String> commands = new ArrayList<>(
             Arrays.asList(
                     "!blink",
-                    "!colour"
+                    "!colour",
+                    "!size"
             )
     );
     private String username;
     private boolean blinkEnabled;
     private boolean colorEnabled;
+    private boolean sizeEnabled;
     private String color;
+    private int size;
 
     public RichTextModule(String username) {
         // Set properties
         this.username = username;
         blinkEnabled = false;
         colorEnabled = false;
+        sizeEnabled = false;
     }
 
     public List<String> getCommands() {
@@ -73,8 +77,8 @@ public class RichTextModule implements Module {
                 // Colour
                 case "!colour": {
                     if (command.size() == 2 && senderUsername.equals(username)) {
-                        String newColor = command.get(1);
-                        switch (newColor) {
+                        String requestedColor = command.get(1);
+                        switch (requestedColor) {
                             case "off": {
                                 // Check if already off
                                 if (colorEnabled) {
@@ -86,19 +90,49 @@ public class RichTextModule implements Module {
                             default: {
                                 // Check if possible color
                                 boolean isColor = false;
-                                if (newColor.equals("rainbow")) {
+                                if (requestedColor.equals("rainbow")) {
                                     isColor = true;
                                     color = RAINBOW_COLOR;
-                                } else if (newColor.length() == 6) {
+                                } else if (requestedColor.length() == 6) {
                                     // Check if valid colour
-                                    if (Integer.parseInt(newColor, 16) >= 0 && Integer.parseInt(newColor, 16) <= Integer.parseInt("ffffff", 16)) {
+                                    if (Integer.parseInt(requestedColor, 16) >= 0 && Integer.parseInt(requestedColor, 16) <= Integer.parseInt("ffffff", 16)) {
                                         isColor = true;
-                                        color = newColor;
+                                        color = requestedColor;
                                     }
                                 }
                                 if (isColor) {
                                     replyMessage = "Colour enabled";
                                     colorEnabled = true;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+                // Size
+                case "!size": {
+                    if (command.size() == 2 && senderUsername.equals(username)) {
+                        String requestedSize = command.get(1);
+                        switch (requestedSize) {
+                            case "off": {
+                                // Check if already off
+                                if (sizeEnabled) {
+                                    replyMessage = "Size disabled";
+                                    sizeEnabled = false;
+                                }
+                                break;
+                            }
+                            default: {
+                                // Check if valid size
+                                try {
+                                    int requestedSizeInt = Integer.parseInt(requestedSize);
+                                    if (requestedSizeInt > 0) {
+                                        size = requestedSizeInt;
+                                        replyMessage = "Size enabled";
+                                        sizeEnabled = true;
+                                    }
+                                } catch (NumberFormatException exception) {
                                 }
                                 break;
                             }
@@ -178,6 +212,11 @@ public class RichTextModule implements Module {
                 // Normal color
                 editedMessage = Chat.color(editedMessage, "#" + color);
             }
+        }
+
+        // Check for size text
+        if (sizeEnabled && senderUsername.equals(username)) {
+            editedMessage = Chat.size(editedMessage, size);
         }
 
         // Check for blink text
