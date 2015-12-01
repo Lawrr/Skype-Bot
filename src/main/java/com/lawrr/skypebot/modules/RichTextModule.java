@@ -3,7 +3,6 @@ package com.lawrr.skypebot.modules;
 import com.lawrr.skypebot.MessageParser;
 import in.kyle.ezskypeezlife.Chat;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -11,8 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RichTextModule implements Module {
-
-    public static String RAINBOW_COLOR = "rainbow_color";
 
     private List<String> commands = new ArrayList<>(
             Arrays.asList(
@@ -22,18 +19,10 @@ public class RichTextModule implements Module {
             )
     );
     private String username;
-    private boolean blinkEnabled;
-    private boolean colorEnabled;
-    private boolean sizeEnabled;
-    private String color;
-    private int size;
 
     public RichTextModule(String username) {
         // Set properties
         this.username = username;
-        blinkEnabled = false;
-        colorEnabled = false;
-        sizeEnabled = false;
     }
 
     public List<String> getCommands() {
@@ -47,97 +36,55 @@ public class RichTextModule implements Module {
 
         // Check if possible command
         if (command.size() > 0) {
-            String replyMessage = "";
+            String editedMessage = "";
             switch (command.get(0)) {
                 // Blink
                 case "!blink": {
-                    if (command.size() == 2 && senderUsername.equals(username)) {
-                        String state = command.get(1);
-                        switch (state) {
-                            case "on": {
-                                // Check if already on
-                                if (!blinkEnabled) {
-                                    replyMessage = "Blink enabled";
-                                    blinkEnabled = true;
-                                }
-                                break;
-                            }
-                            case "off": {
-                                // Check if already off
-                                if (blinkEnabled) {
-                                    replyMessage = "Blink disabled";
-                                    blinkEnabled = false;
-                                }
-                                break;
-                            }
-                        }
+                    if (command.size() > 1 && senderUsername.equals(username)) {
+                        editedMessage = String.format("<blink>%s</blink>", message.substring("!blink ".length()));
                     }
                     break;
                 }
 
                 // Colour
                 case "!colour": {
-                    if (command.size() == 2 && senderUsername.equals(username)) {
-                        String requestedColor = command.get(1);
-                        switch (requestedColor) {
-                            case "off": {
-                                // Check if already off
-                                if (colorEnabled) {
-                                    replyMessage = "Colour disabled";
-                                    colorEnabled = false;
-                                }
-                                break;
-                            }
-                            default: {
-                                // Check if possible color
-                                boolean isColor = false;
-                                if (requestedColor.equals("rainbow")) {
-                                    isColor = true;
-                                    color = RAINBOW_COLOR;
-                                } else if (requestedColor.length() == 6) {
-                                    // Check if valid colour
-                                    if (Integer.parseInt(requestedColor, 16) >= 0 && Integer.parseInt(requestedColor, 16) <= Integer.parseInt("ffffff", 16)) {
-                                        isColor = true;
-                                        color = requestedColor;
-                                    }
-                                }
-                                if (isColor) {
-                                    replyMessage = "Colour enabled";
-                                    colorEnabled = true;
-                                }
-                                break;
+                    if (command.size() > 2 && senderUsername.equals(username)) {
+                        String color = command.get(1);
+                        // Check if possible colour
+                        if (color.equals("rainbow")) {
+                            // Rainbow colour
+                            editedMessage = rainbowTag(message.substring("!colour rainbow ".length()));
+                        } else if (color.length() == 6) {
+                            // Solid colour
+                            // Check if valid hex for colour
+                            if (Integer.parseInt(color, 16) >= 0 && Integer.parseInt(color, 16) <= Integer.parseInt("ffffff", 16)) {
+                                editedMessage = Chat.color(message.substring("!colour ffffff ".length()), "#" + color);
                             }
                         }
                     }
                     break;
                 }
+
                 // Size
                 case "!size": {
-                    if (command.size() == 2 && senderUsername.equals(username)) {
-                        String requestedSize = command.get(1);
-                        switch (requestedSize) {
-                            case "off": {
-                                // Check if already off
-                                if (sizeEnabled) {
-                                    replyMessage = "Size disabled";
-                                    sizeEnabled = false;
-                                }
-                                break;
+                    if (command.size() > 2 && senderUsername.equals(username)) {
+                        try {
+                            // Check if valid size
+                            int size = Integer.parseInt(command.get(1));
+                            if (size > 0) {
+                                editedMessage = Chat.size(message.substring(("!size " + command.get(1) + " ").length()), size);
                             }
-                            default: {
-                                // Check if valid size
-                                try {
-                                    int requestedSizeInt = Integer.parseInt(requestedSize);
-                                    if (requestedSizeInt > 0) {
-                                        size = requestedSizeInt;
-                                        replyMessage = "Size enabled";
-                                        sizeEnabled = true;
-                                    }
-                                } catch (NumberFormatException exception) {
-                                }
-                                break;
-                            }
+                        } catch (NumberFormatException exception) {
+                            // Invalid size
                         }
+                    }
+                    break;
+                }
+
+                // Html from message
+                case "!html": {
+                    if (senderUsername.equals(username)) {
+                        editedMessage = message.substring("!html ".length());
                     }
                     break;
                 }
@@ -149,48 +96,9 @@ public class RichTextModule implements Module {
 
             }
 
-            if (!replyMessage.equals("")) {
-                e.reply(StringEscapeUtils.escapeHtml4(replyMessage));
+            if (!editedMessage.equals("")) {
+                e.getMessage().edit(editedMessage);
             }
-        }
-    }
-
-    public void editTags(SkypeMessageReceivedEvent e) {
-        String message = e.getMessage().getMessage();
-        String senderUsername = e.getMessage().getSender().getUsername();
-        String editedMessage = message;
-
-        // Check if html command to handle tags already in the message
-        if (message.length() > 6 && message.substring(0, 6).equals("!html ") && senderUsername.equals(username)) {
-            editedMessage = message.substring(6);
-        } else {
-            // Not html command, handle tags normally
-
-            // Check for color text
-            if (colorEnabled && senderUsername.equals(username)) {
-                if (color.equals(RAINBOW_COLOR)) {
-                    // Rainbow color
-                    editedMessage = rainbowTag(message);
-                } else {
-                    // Normal color
-                    editedMessage = Chat.color(editedMessage, "#" + color);
-                }
-            }
-
-            // Check for size text
-            if (sizeEnabled && senderUsername.equals(username)) {
-                editedMessage = Chat.size(editedMessage, size);
-            }
-
-            // Check for blink text
-            if (blinkEnabled && senderUsername.equals(username)) {
-                editedMessage = String.format("<blink>%s</blink>", editedMessage);
-            }
-        }
-
-        // Edit original message if different
-        if (!message.equals(editedMessage)) {
-            e.getMessage().edit(editedMessage);
         }
     }
 
