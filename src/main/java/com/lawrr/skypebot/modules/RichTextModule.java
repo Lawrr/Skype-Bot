@@ -1,6 +1,7 @@
 package com.lawrr.skypebot.modules;
 
 import com.lawrr.skypebot.CommandParser;
+import in.kyle.ezskypeezlife.Chat;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 import org.apache.commons.lang.StringUtils;
 
@@ -167,14 +168,15 @@ public class RichTextModule implements Module {
                             String rString = StringUtils.leftPad(Integer.toString(currHexColor[0], 16), 2, '0');
                             String gString = StringUtils.leftPad(Integer.toString(currHexColor[1], 16), 2, '0');
                             String bString = StringUtils.leftPad(Integer.toString(currHexColor[2], 16), 2, '0');
-                            editedMessage += String.format("<font color=\"#%s%s%s\">%s</font>", rString, gString, bString, message.charAt(currCharIndex));
+                            String hexColor = "#" + rString + gString + bString;
+                            editedMessage += Chat.color(Character.toString(message.charAt(currCharIndex)), hexColor);
                             currCharIndex++;
                         }
                     }
                 }
             } else {
                 // Normal color
-                editedMessage = String.format("<font color=\"#%s\">%s</font>", color, editedMessage);
+                editedMessage = Chat.color(editedMessage, "#" + color);
             }
         }
 
