@@ -3,7 +3,7 @@ package com.lawrr.skypebot.modules;
 import com.lawrr.skypebot.MessageParser;
 import in.kyle.ezskypeezlife.Chat;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -159,25 +159,32 @@ public class RichTextModule implements Module {
         String senderUsername = e.getMessage().getSender().getUsername();
         String editedMessage = message;
 
-        // Check for color text
-        if (colorEnabled && senderUsername.equals(username)) {
-            if (color.equals(RAINBOW_COLOR)) {
-                // Rainbow color
-                editedMessage = rainbowTag(message);
-            } else {
-                // Normal color
-                editedMessage = Chat.color(editedMessage, "#" + color);
+        // Check if html command to handle tags already in the message
+        if (message.substring(0, 6).equals("!html ") && senderUsername.equals(username)) {
+            editedMessage = message.substring(6);
+        } else {
+            // Not html command, handle tags normally
+
+            // Check for color text
+            if (colorEnabled && senderUsername.equals(username)) {
+                if (color.equals(RAINBOW_COLOR)) {
+                    // Rainbow color
+                    editedMessage = rainbowTag(message);
+                } else {
+                    // Normal color
+                    editedMessage = Chat.color(editedMessage, "#" + color);
+                }
             }
-        }
 
-        // Check for size text
-        if (sizeEnabled && senderUsername.equals(username)) {
-            editedMessage = Chat.size(editedMessage, size);
-        }
+            // Check for size text
+            if (sizeEnabled && senderUsername.equals(username)) {
+                editedMessage = Chat.size(editedMessage, size);
+            }
 
-        // Check for blink text
-        if (blinkEnabled && senderUsername.equals(username)) {
-            editedMessage = String.format("<blink>%s</blink>", editedMessage);
+            // Check for blink text
+            if (blinkEnabled && senderUsername.equals(username)) {
+                editedMessage = String.format("<blink>%s</blink>", editedMessage);
+            }
         }
 
         // Edit original message if different
