@@ -1,7 +1,7 @@
 package com.lawrr.skypebot.modules;
 
 import com.google.api.client.util.Joiner;
-import com.lawrr.skypebot.CommandParser;
+import com.lawrr.skypebot.MessageParser;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class HelpModule implements Module {
 
     public void handleCommands(SkypeMessageReceivedEvent e) {
         String message = e.getMessage().getMessage();
-        List<String> command = CommandParser.parse(message);
+        List<String> command = MessageParser.toCommand(message);
 
         // Check if possible command
         if (command.size() > 0) {
@@ -61,7 +61,7 @@ public class HelpModule implements Module {
             }
 
             if (!replyMessage.equals("")) {
-                e.reply(replyMessage);
+                e.reply(MessageParser.encode(replyMessage));
             }
         }
     }

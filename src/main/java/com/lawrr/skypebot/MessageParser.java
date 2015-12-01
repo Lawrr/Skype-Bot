@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CommandParser {
+public class MessageParser {
 
-    public static List<String> parse(String message) {
+    public static List<String> toCommand(String message) {
         // Strip tags
         String taglessMessage = message.replaceAll("<.+?>", "");
 
@@ -21,6 +21,12 @@ public class CommandParser {
         }
 
         return command;
+    }
+
+    public static String encode(String message) {
+        // Encodes & character
+        String encodedMessage = message.replaceAll("&", "&amp;");
+        return encodedMessage;
     }
 
 }

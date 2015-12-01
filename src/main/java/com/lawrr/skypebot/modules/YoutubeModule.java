@@ -7,6 +7,7 @@ import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeRequestInitializer;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
+import com.lawrr.skypebot.MessageParser;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 
 import java.time.Duration;
@@ -56,7 +57,7 @@ public class YoutubeModule implements Module {
         // Send message with info
         if (videoDetails.size() > 0) {
             String replyMessage = Joiner.on('\n').join(videoDetails);
-            e.reply(replyMessage);
+            e.reply(MessageParser.encode(replyMessage));
         }
     }
 

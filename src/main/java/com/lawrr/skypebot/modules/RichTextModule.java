@@ -1,6 +1,6 @@
 package com.lawrr.skypebot.modules;
 
-import com.lawrr.skypebot.CommandParser;
+import com.lawrr.skypebot.MessageParser;
 import in.kyle.ezskypeezlife.Chat;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
 import org.apache.commons.lang.StringUtils;
@@ -38,7 +38,7 @@ public class RichTextModule implements Module {
     public void handleCommands(SkypeMessageReceivedEvent e) {
         String message = e.getMessage().getMessage();
         String senderUsername = e.getMessage().getSender().getUsername();
-        List<String> command = CommandParser.parse(message);
+        List<String> command = MessageParser.toCommand(message);
 
         // Check if possible command
         if (command.size() > 0) {
@@ -115,7 +115,7 @@ public class RichTextModule implements Module {
             }
 
             if (!replyMessage.equals("")) {
-                e.reply(replyMessage);
+                e.reply(MessageParser.encode(replyMessage));
             }
         }
     }
@@ -187,7 +187,7 @@ public class RichTextModule implements Module {
 
         // Edit original message if different
         if (!message.equals(editedMessage)) {
-            e.getMessage().edit(editedMessage);
+            e.getMessage().edit(MessageParser.encode(editedMessage));
         }
     }
 
