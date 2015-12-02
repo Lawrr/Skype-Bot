@@ -2,7 +2,6 @@ package com.lawrr.skypebot.modules;
 
 import com.lawrr.skypebot.MessageParser;
 import in.kyle.ezskypeezlife.events.conversation.SkypeMessageReceivedEvent;
-import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +45,7 @@ public class AsciiModule implements Module {
             }
 
             if (!replyMessage.equals("")) {
-                e.reply(StringEscapeUtils.escapeHtml4(replyMessage));
+                e.reply(replyMessage);
             }
         }
     }
