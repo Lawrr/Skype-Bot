@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RichTextModule implements Module {
-
     private List<String> commands = new ArrayList<>(
             Arrays.asList(
                     "!blink",
@@ -150,5 +149,4 @@ public class RichTextModule implements Module {
         }
         return rainbowMessage;
     }
-
 }

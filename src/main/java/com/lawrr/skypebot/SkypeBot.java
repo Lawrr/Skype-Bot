@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class SkypeBot implements SkypeErrorHandler {
-
     private EzSkype ezSkype;
 
     public static void main(String[] args) {
@@ -41,7 +40,7 @@ public class SkypeBot implements SkypeErrorHandler {
             HelpModule helpModule = new HelpModule();
 
             // Set modules
-            List<Module> modules = new ArrayList<Module>();
+            List<Module> modules = new ArrayList<>();
             modules.add(youtubeModule);
             modules.add(asciiModule);
             modules.add(richTextModule);
@@ -50,10 +49,9 @@ public class SkypeBot implements SkypeErrorHandler {
 
             // Register events
             ezSkype.getEventManager().registerEvents(this);
-            ezSkype.getEventManager().registerEvents(youtubeModule);
-            ezSkype.getEventManager().registerEvents(asciiModule);
-            ezSkype.getEventManager().registerEvents(richTextModule);
-            ezSkype.getEventManager().registerEvents(helpModule);
+            for (Module m : modules) {
+                ezSkype.getEventManager().registerEvents(m);
+            }
 
             // Start
             System.out.println("Bot started");
@@ -82,5 +80,4 @@ public class SkypeBot implements SkypeErrorHandler {
         System.out.println("Set new password!");
         return null;
     }
-
 }

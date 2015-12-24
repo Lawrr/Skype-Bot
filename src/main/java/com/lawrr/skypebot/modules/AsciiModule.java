@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AsciiModule implements Module {
-
     private List<String> commands = new ArrayList<>(
             Arrays.asList(
                     "!shrug"
@@ -16,7 +15,6 @@ public class AsciiModule implements Module {
     );
 
     public AsciiModule() {
-
     }
 
     public List<String> getCommands() {
@@ -49,5 +47,4 @@ public class AsciiModule implements Module {
             }
         }
     }
-
 }

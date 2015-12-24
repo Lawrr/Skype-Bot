@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class HelpModule implements Module {
-
     private List<String> commands = new ArrayList<>(
             Arrays.asList(
                     "!help"
@@ -19,7 +18,7 @@ public class HelpModule implements Module {
     private List<Module> modules;
 
     public HelpModule() {
-        modules = new ArrayList<Module>();
+        modules = new ArrayList<>();
     }
 
     public HelpModule(List<Module> modules) {
@@ -44,7 +43,7 @@ public class HelpModule implements Module {
             switch (command.get(0)) {
                 // Help
                 case "!help": {
-                    List<String> allCommands = new ArrayList<String>();
+                    List<String> allCommands = new ArrayList<>();
                     for (Module m : modules) {
                         for (String s : m.getCommands()) {
                             allCommands.add(s);
@@ -66,5 +65,4 @@ public class HelpModule implements Module {
             }
         }
     }
-
 }

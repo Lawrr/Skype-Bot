@@ -18,10 +18,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class YoutubeModule implements Module {
-
     private List<String> commands = new ArrayList<>(
-            Arrays.asList(
-            )
+            Arrays.asList()
     );
     private YouTube youtube;
 
@@ -47,7 +45,7 @@ public class YoutubeModule implements Module {
         List<Video> videos = getVideos(videoIdsString);
 
         // Format videos data
-        List<String> videoDetails = new ArrayList<String>();
+        List<String> videoDetails = new ArrayList<>();
         for(Video v : videos) {
             String title = v.getSnippet().getTitle();
             String duration = formatDuration(v.getContentDetails().getDuration());
@@ -67,7 +65,7 @@ public class YoutubeModule implements Module {
         Matcher matcher = linkPattern.matcher(message);
 
         // Add to list
-        List<String> videoIds = new ArrayList<String>();
+        List<String> videoIds = new ArrayList<>();
         while (matcher.find()) {
             // Add unique
             if (!videoIds.contains(matcher.group(6))) {
@@ -79,7 +77,7 @@ public class YoutubeModule implements Module {
     }
 
     private List<Video> getVideos(String videoIdsString) {
-        List<Video> videos = new ArrayList<Video>();
+        List<Video> videos = new ArrayList<>();
         try {
             YouTube.Videos.List request = youtube.videos().list("snippet, contentDetails").setId(videoIdsString);
             VideoListResponse response = request.execute();

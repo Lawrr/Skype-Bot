@@ -1,7 +1,6 @@
 package com.lawrr.skypebot;
 
 public class SkypeBotCredentials {
-
     private String username;
     private String password;
 
@@ -18,5 +17,4 @@ public class SkypeBotCredentials {
     public String getYoutubeApiKey() {
         return youtubeApiKey;
     }
-
 }
