@@ -11,9 +11,11 @@ public class MessageParser {
         List<String> command = new ArrayList<>();
 
         // Check if actually a command
-        if (words[0].indexOf("!") == 0) {
-            // Get command and params
-            command = new ArrayList<>(Arrays.asList(words));
+        if (words.length > 0) {
+            if (words[0].indexOf("!") == 0) {
+                // Get command and params
+                command = new ArrayList<>(Arrays.asList(words));
+            }
         }
 
         return command;
